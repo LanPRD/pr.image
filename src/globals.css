@@ -1,0 +1,307 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .box-shadow {
+    box-shadow: var(--mauve-8) 0px 5px 15px;
+  }
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    --pink-1: #fdf9f9;
+    --pink-2: #fef4f4;
+    --pink-3: #ffe5e6;
+    --pink-4: #ffd6d8;
+    --pink-5: #ffc7cb;
+    --pink-6: #ffb7bb;
+    --pink-7: #f7a2a8;
+    --pink-8: #ef8690;
+    --pink-9: #f80255;
+    --pink-10: #e90049;
+    --pink-11: #d20040;
+    --pink-12: #6f0020;
+
+    --pink-a1: #fe633205;
+    --pink-a2: #ffedec80;
+    --pink-a3: #ffe5e6;
+    --pink-a4: #ffd6d8;
+    --pink-a5: #ffc7cb;
+    --pink-a6: #ffb7bb;
+    --pink-a7: #ec03125c;
+    --pink-a8: #e0021678;
+    --pink-a9: #f80054fd;
+    --pink-a10: #e90049;
+    --pink-a11: #d20040;
+    --pink-a12: #6f0020;
+
+    --pink-contrast: #fff;
+    --pink-surface: #fef3f2cc;
+    --pink-indicator: #f80255;
+    --pink-track: #f80255;
+
+    --destructive: #e5484d;
+
+    --mauve-1: #fdfcfd;
+    --mauve-2: #faf9fb;
+    --mauve-3: #f2eff3;
+    --mauve-4: #eae7ec;
+    --mauve-5: #e3dfe6;
+    --mauve-6: #dbd8e0;
+    --mauve-7: #d0cdd7;
+    --mauve-8: #bcbac7;
+    --mauve-9: #8e8c99;
+    --mauve-10: #84828e;
+    --mauve-11: #65636d;
+    --mauve-12: #211f26;
+
+    --prism-color-text: #2d2d2d; /* Texto principal */
+    --prism-color-background: #f2eff3; /* Fundo */
+    --prism-token-comment: #4f5a64; /* Comentários */
+    --prism-token-punctuation: #393a34; /* Pontuação */
+    --prism-token-symbol: #b02c39; /* Tags e Símbolos */
+    --prism-token-string: #032f62; /* Strings */
+    --prism-token-operator: #b02c39; /* Operadores */
+    --prism-token-keyword: #a72530; /* Palavras-chave */
+    --prism-token-function: #6f42c1; /* Funções */
+    --prism-token-variable: #005cc5; /* Variáveis */
+    --prism-token-attr-name: #6f42c1; /* Nomes de Atributos */
+    --prism-token-attr-value: #032f62; /* Valores de Atributos */
+    --prism-token-number: #005cc5; /* Números */
+  }
+
+  @supports (color: color(display-p3 1 1 1)) {
+    @media (color-gamut: p3) {
+      :root {
+        --pink-1: oklch(98.5% 0.0042 14.77);
+        --pink-2: oklch(97.4% 0.0107 14.77);
+        --pink-3: oklch(94.4% 0.0283 14.77);
+        --pink-4: oklch(91.7% 0.0539 14.77);
+        --pink-5: oklch(88.5% 0.0699 14.77);
+        --pink-6: oklch(84.6% 0.0842 14.77);
+        --pink-7: oklch(79.8% 0.1016 14.77);
+        --pink-8: oklch(73.6% 0.1292 14.77);
+        --pink-9: oklch(62.3% 0.2485 14.77);
+        --pink-10: oklch(58.1% 0.2499 14.77);
+        --pink-11: oklch(53.7% 0.2485 14.77);
+        --pink-12: oklch(34.1% 0.1397 14.77);
+
+        --pink-a1: color(display-p3 0.749 0.2549 0.0157 / 0.016);
+        --pink-a2: color(display-p3 0.8863 0.1176 0.0157 / 0.036);
+        --pink-a3: color(display-p3 0.9098 0.0431 0.0039 / 0.091);
+        --pink-a4: color(display-p3 0.8588 0.0039 0.0078 / 0.143);
+        --pink-a5: color(display-p3 0.8588 0.0039 0.0471 / 0.203);
+        --pink-a6: color(display-p3 0.8588 0.0039 0.0196 / 0.262);
+        --pink-a7: color(display-p3 0.7882 0.0039 0.0314 / 0.342);
+        --pink-a8: color(display-p3 0.749 0.0039 0.0588 / 0.449);
+        --pink-a9: color(display-p3 0.8706 0 0.1922 / 0.802);
+        --pink-a10: color(display-p3 0.8039 0 0.149 / 0.818);
+        --pink-a11: color(display-p3 0.7098 0 0.1294 / 0.842);
+        --pink-a12: color(display-p3 0.3569 0 0.0745 / 0.937);
+
+        --pink-contrast: #fff;
+        --pink-surface: color(display-p3 0.9843 0.9529 0.9451 / 0.8);
+        --pink-indicator: oklch(62.3% 0.2485 14.77);
+        --pink-track: oklch(62.3% 0.2485 14.77);
+      }
+    }
+  }
+
+  .dark {
+    --pink-1: #190e0f;
+    --pink-2: #201414;
+    --pink-3: #400e16;
+    --pink-4: #570319;
+    --pink-5: #680620;
+    --pink-6: #7a152b;
+    --pink-7: #95233a;
+    --pink-8: #c32d4c;
+    --pink-9: #f80255;
+    --pink-10: #e80049;
+    --pink-11: #ff8e9b;
+    --pink-12: #ffced2;
+
+    --pink-a1: #f2000008;
+    --pink-a2: #f2412310;
+    --pink-a3: #fd022332;
+    --pink-a4: #fd00284b;
+    --pink-a5: #fe00375d;
+    --pink-a6: #ff1a4970;
+    --pink-a7: #ff315a8d;
+    --pink-a8: #fe375fbf;
+    --pink-a9: #ff0256f8;
+    --pink-a10: #fe004ee7;
+    --pink-a11: #ff8e9b;
+    --pink-a12: #ffced2;
+
+    --pink-contrast: #fff;
+    --pink-surface: #2e171580;
+    --pink-indicator: #f80255;
+    --pink-track: #f80255;
+
+    --mauve-1: #121113;
+    --mauve-2: #1a191b;
+    --mauve-3: #232225;
+    --mauve-4: #2b292d;
+    --mauve-5: #323035;
+    --mauve-6: #3c393f;
+    --mauve-7: #49474e;
+    --mauve-8: #625f69;
+    --mauve-9: #6f6d78;
+    --mauve-10: #7c7a85;
+    --mauve-11: #b5b2bc;
+    --mauve-12: #eeeef0;
+
+    --prism-color-text: #f8f8f2; /* Texto principal */
+    --prism-color-background: #232225; /* Fundo */
+    --prism-token-comment: #8ba3d1; /* Comentários */
+    --prism-token-punctuation: #f8f8f2; /* Pontuação */
+    --prism-token-symbol: #ff79c6; /* Tags e Símbolos */
+    --prism-token-string: #f1fa8c; /* Strings */
+    --prism-token-operator: #ff79c6; /* Operadores */
+    --prism-token-keyword: #ff79c6; /* Palavras-chave */
+    --prism-token-function: #50fa7b; /* Funções */
+    --prism-token-variable: #8be9fd; /* Variáveis */
+    --prism-token-attr-name: #50fa7b; /* Nomes de Atributos */
+    --prism-token-attr-value: #f1fa8c; /* Valores de Atributos */
+    --prism-token-number: #bd93f9; /* Números */
+  }
+
+  @supports (color: color(display-p3 1 1 1)) {
+    @media (color-gamut: p3) {
+      .dark {
+        --pink-1: oklch(18% 0.0174 14.77);
+        --pink-2: oklch(20.6% 0.0203 14.77);
+        --pink-3: oklch(25.3% 0.0767 14.77);
+        --pink-4: oklch(29.2% 0.1132 14.77);
+        --pink-5: oklch(33.2% 0.1271 14.77);
+        --pink-6: oklch(38.2% 0.1338 14.77);
+        --pink-7: oklch(44.8% 0.1485 14.77);
+        --pink-8: oklch(54.4% 0.1852 14.77);
+        --pink-9: oklch(62.3% 0.2485 14.77);
+        --pink-10: oklch(58.1% 0.2485 14.77);
+        --pink-11: oklch(78.6% 0.2053 14.77);
+        --pink-12: oklch(90.5% 0.0671 14.77);
+
+        --pink-a1: color(display-p3 0.9647 0 0 / 0.022);
+        --pink-a2: color(display-p3 0.9961 0.298 0.1529 / 0.051);
+        --pink-a3: color(display-p3 1 0.0902 0.1686 / 0.169);
+        --pink-a4: color(display-p3 1 0.0078 0.1843 / 0.258);
+        --pink-a5: color(display-p3 1 0.0941 0.2588 / 0.325);
+        --pink-a6: color(display-p3 1 0.2078 0.3333 / 0.397);
+        --pink-a7: color(display-p3 1 0.2863 0.3961 / 0.503);
+        --pink-a8: color(display-p3 1 0.3098 0.4157 / 0.68);
+        --pink-a9: color(display-p3 1 0.2118 0.3843 / 0.887);
+        --pink-a10: color(display-p3 1 0.2039 0.3529 / 0.823);
+        --pink-a11: color(display-p3 1 0.6157 0.6549 / 0.937);
+        --pink-a12: color(display-p3 0.9961 0.8392 0.851 / 0.967);
+
+        --pink-contrast: #fff;
+        --pink-surface: color(display-p3 0.1647 0.0863 0.0863 / 0.5);
+        --pink-indicator: oklch(62.3% 0.2485 14.77);
+        --pink-track: oklch(62.3% 0.2485 14.77);
+      }
+    }
+  }
+
+  body {
+    color: var(--mauve-11);
+    background: var(--mauve-1);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  strong,
+  b {
+    font-weight: 700;
+    color: var(--mauve-12);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply mb-1 text-mauve-12 font-bold scroll-m-20;
+  }
+
+  h1 {
+    @apply text-4xl text-mauve-12 font-bold;
+  }
+
+  h2 {
+    @apply text-3xl;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+
+  h4 {
+    @apply text-xl;
+  }
+
+  h5 {
+    @apply text-lg;
+  }
+
+  p {
+    @apply text-base;
+  }
+
+  a {
+    @apply underline text-accent-12 hover:text-accent-11 disabled:text-mauve-6;
+  }
+
+  textarea {
+    @apply w-full text-base;
+  }
+
+  input {
+    @apply text-base;
+  }
+
+  table {
+    @apply w-full border-collapse;
+  }
+
+  th,
+  td {
+    @apply p-2 border-mauve-3;
+  }
+
+  th {
+    @apply bg-mauve-3 text-left;
+  }
+
+  tr:hover {
+    @apply bg-mauve-4;
+  }
+
+  hr {
+    @apply border-t border-t-mauve-6;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2 h-2 bg-mauve-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-mauve-2;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-accent-9;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent-10;
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    @apply brightness-110;
+  }
+}

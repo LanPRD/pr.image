@@ -1,0 +1,79 @@
+---
+import "@/globals.css";
+
+import Footer from "@/components/footer.astro";
+import { ToggleTheme } from "@/components/toggle-theme";
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+
+<script is:inline>
+	const getThemePreference = () => {
+		if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+			return localStorage.getItem("theme");
+		}
+		return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+	};
+	const isDark = getThemePreference() === "dark";
+	document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+
+	if (typeof localStorage !== "undefined") {
+		const observer = new MutationObserver(() => {
+			const isDark = document.documentElement.classList.contains("dark");
+			localStorage.setItem("theme", isDark ? "dark" : "light");
+		});
+		observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+	}
+</script>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+
+	<body class="bg-mauve-1 overflow-x-hidden">
+    <header class="bg-accent-2 h-20 sticky top-0 z-50 w-screen box-shadow [box-shadow:0_2px_8px_rgba(15,18,25,15%)]">
+      <div class="grid grid-cols-3 w-full h-full px-4">
+        <div class="self-center">
+          <h2>
+            <a class="no-underline text-accent-9 cursor-pointer hover:text-accent-9">pr.image</a>
+          </h2>
+        </div>
+
+        <nav>
+          <ul class="flex items-center justify-center h-full gap-6">
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/about">About</a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="justify-self-end self-center">
+          <ToggleTheme client:load />
+        </div>
+      </div>
+    </header>
+
+    <main class="px-4 py-10">
+      <div class="max-w-4xl mx-auto">
+        <slot />
+      </div>
+    </main>
+
+    <Footer />
+	</body>
+</html>

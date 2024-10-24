@@ -1,0 +1,21 @@
+---
+import Input from "@/components/input.astro";
+import Layout from "../layouts/Layout.astro";
+import { Label } from "@/components/label";
+---
+
+<Layout title="Home | pr.image">
+  <hgroup>
+    <h1>JPG to PNG</h1>
+    <h3 class="text-mauve-11">Convert image from JPG to PNG by pr.image</h3>
+  </hgroup>
+
+  <section>
+    <form>
+      <div>
+        <Label htmlFor="image-selected" className="h-20 bg-mauve-2 flex items-center justify-center rounded border">Select image</Label>
+        <Input id="image-selected" type="file" class="sr-only" />
+      </div>
+    </form>
+  </section>
+</Layout>
