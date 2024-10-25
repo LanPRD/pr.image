@@ -1,21 +1,120 @@
 ---
 import Input from "@/components/input.astro";
-import Layout from "../layouts/Layout.astro";
 import { Label } from "@/components/label";
+import { Slider } from "@/components/slider";
+import { cn } from "@/utils/tailwind-merge";
+import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Home | pr.image">
+<Layout title="JPG to PNG | pr.image">
   <hgroup>
     <h1>JPG to PNG</h1>
-    <h3 class="text-mauve-11">Convert image from JPG to PNG by pr.image</h3>
+    <h2 class="text-mauve-11 text-xl">Convert image from JPG to PNG</h2>
   </hgroup>
 
-  <section>
-    <form>
+  <section class="mt-10">
+    <form id="conversion-form">
       <div>
-        <Label htmlFor="image-selected" className="h-20 bg-mauve-2 flex items-center justify-center rounded border">Select image</Label>
-        <Input id="image-selected" type="file" class="sr-only" />
+        <Label
+          htmlFor="image-selected"
+          className={cn(
+            "flex items-center justify-center h-80",
+            "bg-mauve-3 rounded border border-accent-7 hover:bg-mauve-4 hover:border-accent-8",
+            "text-accent-11 cursor-pointer"
+          )}
+        >
+          Select JPG image
+        </Label>
+        <Input id="image-selected" type="file" accept=".jpg, .jpeg" class="sr-only" />
+      </div>
+
+      <!-- Controle de Qualidade -->
+      <div class="mt-4">
+        <div class="mt-4">
+          <Label htmlFor="quality-range" className="block mb-2">Quality: <span id="quality-value">50%</span></Label>
+          <Slider max={100} defaultValue={[50]} step={1} client:load id="quality-range" />
+        </div>
       </div>
     </form>
+
+    <!-- Canvas para desenhar a imagem e converter -->
+    <canvas id="canvas" class="hidden mt-4 border border-gray-300"></canvas>
+
+    <!-- Container para o link de download -->
+    <div id="download-container" class="hidden mt-4">
+      <a id="download-link" href="#" download="converted.png" class="btn btn-primary">Download PNG</a>
+    </div>
   </section>
+
+  <script>
+    import { ImageConversionService, type ConversionResponse } from "@/services/image-conversion-service";
+    import { removeExtension } from "@/utils/file";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const fileInput = document.getElementById("image-selected") as HTMLInputElement | null;
+      const canvas = document.getElementById("canvas") as HTMLCanvasElement | null;
+      const downloadLink = document.getElementById("download-link") as HTMLAnchorElement | null;
+      const downloadContainer = document.getElementById("download-container") as HTMLElement | null;
+      const qualityRange = document.getElementById("quality-range") as HTMLInputElement | null;
+      const qualityValue = document.getElementById("quality-value") as HTMLElement | null;
+
+      if (!fileInput || !canvas || !downloadLink || !downloadContainer || !qualityRange || !qualityValue) {
+        console.error("Um ou mais elementos necessários não foram encontrados no DOM.");
+        return;
+      }
+
+      // Atualizar o valor da qualidade exibido
+      qualityRange.addEventListener("input", event => {
+        const input = event.target as HTMLInputElement;
+        qualityValue.textContent = `${input.value}%`;
+      });
+
+      // Listener para mudança no input de arquivo
+      fileInput.addEventListener("change", async (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        const file: File | null = target.files ? target.files[0] : null;
+
+        if (!file) return;
+
+        // Verificar se o arquivo é JPG ou JPEG
+        if (!file.type.startsWith("image/jpeg") && !file.type.startsWith("image/jpg")) {
+          alert("Please select a JPG image.");
+          return;
+        }
+
+        try {
+          const quality = parseInt(qualityRange.value, 10) / 100;
+
+          // Chamar o serviço para converter a imagem
+          const response: ConversionResponse = await ImageConversionService.convertJpgToPng(file, quality);
+
+          if (response.src && downloadLink && downloadContainer && canvas) {
+            downloadLink.href = response.src;
+            downloadLink.download = `${removeExtension(file.name)}.png`;
+            downloadContainer.classList.remove("hidden");
+            canvas.classList.remove("hidden");
+          }
+        } catch (error) {
+          console.error("Erro na conversão da imagem:", error);
+          alert("Failed to convert the image.");
+        }
+      });
+
+      if (downloadLink) {
+        downloadLink.addEventListener("click", () => {
+          if (downloadLink.href) {
+            setTimeout(() => {
+              URL.revokeObjectURL(downloadLink.href);
+              downloadLink.href = "#";
+              downloadLink.download = "converted.png";
+              downloadContainer.classList.add("hidden");
+              if (canvas) {
+                canvas.classList.add("hidden");
+              }
+            }, 100);
+          }
+        });
+      }
+    });
+  </script>
 </Layout>

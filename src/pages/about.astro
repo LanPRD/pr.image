@@ -1,11 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
-
 
 <Layout title="About | pr.image">
   <div class="mb-4 space-y-2 max-w-4xl mx-auto">
-    <div class="relative w-full group-hover:box-shadow rounded-lg overflow-hidden transition-shadow h-60 sm:h-[440px] border border-mauve-6">
+    <div
+      class="relative w-full group-hover:box-shadow rounded-lg overflow-hidden transition-shadow h-60 sm:h-[440px] border border-mauve-6"
+    >
       <img
         src="https://res.cloudinary.com/dhhc248sr/image/upload/v1726308391/logotipo_colorido_9e1162f955.png"
         alt="About me"
@@ -17,14 +18,16 @@ import Layout from '../layouts/Layout.astro';
     </div>
 
     <time datetime={new Date().toISOString()} class="text-center block text-accent-11">
-      {Intl.DateTimeFormat("pt-BR",{
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        timeZone: "America/Sao_Paulo",
-      }).format(new Date())}
+      {
+        Intl.DateTimeFormat("pt-BR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          timeZone: "America/Sao_Paulo"
+        }).format(new Date())
+      }
     </time>
   </div>
 
@@ -35,22 +38,22 @@ import Layout from '../layouts/Layout.astro';
 
     <div class="space-y-10">
       <p>
-        Olá! Sou Allan Prado, um desenvolvedor Full-stack com uma paixão especial por tecnologias inovadoras e por
-        criar soluções que vão além do básico. Este blog é um espaço onde compartilho insights, projetos e as
-        últimas tendências no mundo do desenvolvimento web, blockchain, e outras áreas tecnológicas que me fascinam.
+        Olá! Sou Allan Prado, um desenvolvedor Full-stack com uma paixão especial por tecnologias inovadoras e por criar
+        soluções que vão além do básico. Este blog é um espaço onde compartilho insights, projetos e as últimas
+        tendências no mundo do desenvolvimento web, blockchain, e outras áreas tecnológicas que me fascinam.
       </p>
 
       <p>
         Minha jornada como desenvolvedor começou há alguns anos, e desde então, tenho me aprofundado em diversas
-        tecnologias, como React, Next.js, Flutter, Node.js, C#, e especialmente blockchain, com foco nas redes
-        Solana e Ethereum (EVM). Além disso, sempre procuro aplicar as melhores práticas de desenvolvimento, com um
-        forte foco em usabilidade e performance.
+        tecnologias, como React, Next.js, Flutter, Node.js, C#, e especialmente blockchain, com foco nas redes Solana e
+        Ethereum (EVM). Além disso, sempre procuro aplicar as melhores práticas de desenvolvimento, com um forte foco em
+        usabilidade e performance.
       </p>
 
       <p>
-        Aqui no blog, você encontrará tutoriais, análises de projetos, discussões sobre novas tecnologias, e muito
-        mais. Meu objetivo é não apenas compartilhar conhecimento, mas também inspirar outros desenvolvedores a
-        explorarem novos horizontes e a pensarem fora da caixa.
+        Aqui no blog, você encontrará tutoriais, análises de projetos, discussões sobre novas tecnologias, e muito mais.
+        Meu objetivo é não apenas compartilhar conhecimento, mas também inspirar outros desenvolvedores a explorarem
+        novos horizontes e a pensarem fora da caixa.
       </p>
     </div>
 
@@ -58,15 +61,15 @@ import Layout from '../layouts/Layout.astro';
 
     <div class="space-y-10">
       <p>
-        A pr.dev é mais do que uma plataforma; é uma extensão da minha paixão pelo desenvolvimento. Aqui, trabalho
-        em projetos desafiadores que combinam criatividade e tecnologia de ponta. Desde a criação de aplicativos
-        inovadores até a automação de processos complexos, estou sempre em busca de novas maneiras de simplificar
-        tarefas e criar experiências que realmente façam a diferença.
+        A pr.dev é mais do que uma plataforma; é uma extensão da minha paixão pelo desenvolvimento. Aqui, trabalho em
+        projetos desafiadores que combinam criatividade e tecnologia de ponta. Desde a criação de aplicativos inovadores
+        até a automação de processos complexos, estou sempre em busca de novas maneiras de simplificar tarefas e criar
+        experiências que realmente façam a diferença.
       </p>
 
       <p>
-        Se você compartilha da mesma paixão por tecnologia e desenvolvimento, está no lugar certo. Espero que este
-        blog e a pr.dev possam ser uma fonte constante de inspiração e aprendizado para você.
+        Se você compartilha da mesma paixão por tecnologia e desenvolvimento, está no lugar certo. Espero que este blog
+        e a pr.dev possam ser uma fonte constante de inspiração e aprendizado para você.
       </p>
     </div>
   </div>
