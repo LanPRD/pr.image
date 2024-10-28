@@ -1,4 +1,5 @@
 ---
+import { Button } from "@/components/button";
 import Input from "@/components/input.astro";
 import { Label } from "@/components/label";
 import { Slider } from "@/components/slider";
@@ -30,35 +31,38 @@ import Layout from "../layouts/Layout.astro";
 
       <!-- Controle de Qualidade -->
       <div class="mt-4">
-        <div class="mt-4">
-          <Label htmlFor="quality-range" className="block mb-2">Quality: <span id="quality-value">50%</span></Label>
-          <Slider max={100} defaultValue={[50]} step={1} client:load id="quality-range" />
-        </div>
+        <Label htmlFor="quality-range" className="block mb-2">Quality: <span id="quality-value">50%</span></Label>
+        <Slider max={100} defaultValue={[50]} step={1} client:load id="quality-range" />
       </div>
     </form>
 
-    <!-- Canvas para desenhar a imagem e converter -->
-    <canvas id="canvas" class="hidden mt-4 border border-gray-300"></canvas>
+    <div class="mt-8 flex items-center justify-center">
+      <Button className="w-1/2" id="start-conversion">Start conversion</Button>
+    </div>
+
+    <!-- Image para desenhar a imagem e converter -->
+    <img id="img-preview" class="hidden mt-4 border border-gray-300" />
 
     <!-- Container para o link de download -->
     <div id="download-container" class="hidden mt-4">
-      <a id="download-link" href="#" download="converted.png" class="btn btn-primary">Download PNG</a>
+      <a id="download-link" href="#" download="" class="btn btn-primary">Download PNG</a>
     </div>
   </section>
 
   <script>
-    import { ImageConversionService, type ConversionResponse } from "@/services/image-conversion-service";
+    import { ImageConversionController } from "@/controllers/image-conversion-controller";
     import { removeExtension } from "@/utils/file";
 
     document.addEventListener("DOMContentLoaded", () => {
       const fileInput = document.getElementById("image-selected") as HTMLInputElement | null;
-      const canvas = document.getElementById("canvas") as HTMLCanvasElement | null;
+      const imgPreview = document.getElementById("img-preview") as HTMLImageElement | null;
       const downloadLink = document.getElementById("download-link") as HTMLAnchorElement | null;
       const downloadContainer = document.getElementById("download-container") as HTMLElement | null;
       const qualityRange = document.getElementById("quality-range") as HTMLInputElement | null;
       const qualityValue = document.getElementById("quality-value") as HTMLElement | null;
+      const conversionButton = document.getElementById("start-conversion") as HTMLElement | null;
 
-      if (!fileInput || !canvas || !downloadLink || !downloadContainer || !qualityRange || !qualityValue) {
+      if (!fileInput || !qualityRange || !qualityValue || !conversionButton || !downloadLink || !downloadContainer) {
         console.error("Um ou mais elementos necessários não foram encontrados no DOM.");
         return;
       }
@@ -69,52 +73,45 @@ import Layout from "../layouts/Layout.astro";
         qualityValue.textContent = `${input.value}%`;
       });
 
-      // Listener para mudança no input de arquivo
-      fileInput.addEventListener("change", async (event: Event) => {
-        const target = event.target as HTMLInputElement;
-        const file: File | null = target.files ? target.files[0] : null;
+      conversionButton.addEventListener("click", async _event => {
+        const file = fileInput.files ? fileInput.files[0] : null;
 
-        if (!file) return;
+        const thumbElement = qualityRange.querySelector('[role="slider"]');
+        const quality = thumbElement ? thumbElement.getAttribute("aria-valuenow") : null;
 
-        // Verificar se o arquivo é JPG ou JPEG
-        if (!file.type.startsWith("image/jpeg") && !file.type.startsWith("image/jpg")) {
-          alert("Please select a JPG image.");
+        if (!file) {
+          alert("File is not selected.");
+          return;
+        }
+
+        if (quality === null) {
+          alert("Select the quality for conversion.");
           return;
         }
 
         try {
-          const quality = parseInt(qualityRange.value, 10) / 100;
+          const response = await ImageConversionController.start(file, quality);
 
-          // Chamar o serviço para converter a imagem
-          const response: ConversionResponse = await ImageConversionService.convertJpgToPng(file, quality);
-
-          if (response.src && downloadLink && downloadContainer && canvas) {
-            downloadLink.href = response.src;
-            downloadLink.download = `${removeExtension(file.name)}.png`;
-            downloadContainer.classList.remove("hidden");
-            canvas.classList.remove("hidden");
+          if (!imgPreview) {
+            console.error("Um ou mais elementos necessários não foram encontrados no DOM.");
+            return;
           }
+
+          if (!response || !response.src) {
+            console.error("Aconteceu algo de errado ao converter a imagem. RESPONSE:", response);
+            return;
+          }
+
+          downloadLink.href = response.src;
+          downloadLink.download = `${removeExtension(file.name)}.png`;
+          imgPreview.src = response.src;
+          downloadContainer.classList.remove("hidden");
+          imgPreview.classList.remove("hidden");
         } catch (error) {
           console.error("Erro na conversão da imagem:", error);
           alert("Failed to convert the image.");
         }
       });
-
-      if (downloadLink) {
-        downloadLink.addEventListener("click", () => {
-          if (downloadLink.href) {
-            setTimeout(() => {
-              URL.revokeObjectURL(downloadLink.href);
-              downloadLink.href = "#";
-              downloadLink.download = "converted.png";
-              downloadContainer.classList.add("hidden");
-              if (canvas) {
-                canvas.classList.add("hidden");
-              }
-            }, 100);
-          }
-        });
-      }
     });
   </script>
 </Layout>

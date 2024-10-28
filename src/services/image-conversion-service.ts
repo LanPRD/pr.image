@@ -12,109 +12,67 @@ export interface ConversionResponse {
 }
 
 export class ImageConversionService {
-  /**
-   * Converte uma imagem JPG para PNG usando a API Canvas.
-   * @param file Arquivo de imagem JPG.
-   * @param quality Qualidade da conversão (0 a 1).
-   * @returns Promise com a URL da imagem convertida ou erro.
-   */
-  static convertJpgToPng(
-    file: File,
-    quality: number = 0.95,
-  ): Promise<ConversionResponse> {
+  static convertJpgToPng(file: File, quality: number): Promise<ConversionResponse> {
     return new Promise((resolve, reject) => {
-      if (
-        !file.type.startsWith("image/jpeg") &&
-        !file.type.startsWith("image/jpg")
-      ) {
-        reject({
-          error: "O arquivo selecionado não é um JPG válido.",
-          file,
-          targetFormat: "png",
-        });
-        return;
-      }
-
       const reader = new FileReader();
 
-      reader.onload = function (e: ProgressEvent<FileReader>) {
-        const result = e.target?.result;
-
-        if (typeof result !== "string") {
-          reject({
-            error: "Falha ao ler o arquivo.",
-            file,
-            targetFormat: "png",
-          });
+      reader.onload = async function (e: ProgressEvent<FileReader>) {
+        if (!e.target?.result) {
+          reject({ error: "Falha ao carregar dados da imagem", file, targetFormat: "png" });
           return;
         }
 
-        const img = new Image();
+        try {
+          // Cria um ImageBitmap para carregar a imagem
+          const imgBitmap = await createImageBitmap(new Blob([e.target.result], { type: file.type }));
 
-        img.onload = function () {
+          // Cria um canvas HTML padrão
           const canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
+          canvas.width = imgBitmap.width;
+          canvas.height = imgBitmap.height;
           const ctx = canvas.getContext("2d");
 
           if (!ctx) {
-            reject({
-              error: "Não foi possível obter o contexto do Canvas.",
-              file,
-              targetFormat: "png",
-            });
+            reject({ error: "Não foi possível obter o contexto 2D do canvas", file, targetFormat: "png" });
             return;
           }
 
-          ctx.drawImage(img, 0, 0);
+          // Desenha o ImageBitmap no canvas
+          ctx.drawImage(imgBitmap, 0, 0);
 
-          console.log(quality, typeof quality);
-
+          // Converte o conteúdo do canvas para um Blob PNG
           canvas.toBlob(
-            (blob: Blob | null) => {
-              if (blob) {
-                const url = URL.createObjectURL(blob);
-
-                resolve({
-                  src: url,
-                  file,
-                  outputName: `${removeExtension(file.name)}.png`,
-                  outputSize: blob.size,
-                  outputWidth: canvas.width,
-                  outputHeight: canvas.height,
-                  targetFormat: "png",
-                });
-              } else {
-                reject({
-                  error: "Falha na conversão da imagem.",
-                  file,
-                  targetFormat: "png",
-                });
+            blob => {
+              if (!blob) {
+                reject({ error: "Falha na conversão da imagem", file, targetFormat: "png" });
+                return;
               }
+
+              const url = URL.createObjectURL(blob);
+
+              resolve({
+                src: url,
+                file,
+                outputName: `${removeExtension(file.name)}.png`,
+                outputSize: blob.size,
+                outputWidth: canvas.width,
+                outputHeight: canvas.height,
+                targetFormat: "png"
+              });
             },
             "image/png",
-            quality,
+            quality
           );
-        };
-
-        img.onerror = function () {
-          reject({
-            error: "Falha ao carregar a imagem.",
-            file,
-            targetFormat: "png",
-          });
-        };
-
-        img.src = result;
+        } catch (error) {
+          reject({ error: "Erro durante a conversão da imagem", file, targetFormat: "png" });
+        }
       };
 
       reader.onerror = function () {
-        reject({ error: "Erro ao ler o arquivo.", file, targetFormat: "png" });
+        reject({ error: "Erro ao ler o arquivo", file, targetFormat: "png" });
       };
 
-      reader.readAsDataURL(file);
+      reader.readAsArrayBuffer(file); // Lê o arquivo como ArrayBuffer
     });
   }
-
-  successResponse<T>(resolve: (value: T | PromiseLike<T>) => void) {}
 }
