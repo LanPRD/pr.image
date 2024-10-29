@@ -1,14 +1,22 @@
 ---
 import { Button } from "@/components/button";
+import { ComboboxFormat } from "@/components/combobox-format";
 import Input from "@/components/input.astro";
 import { Label } from "@/components/label";
 import { Slider } from "@/components/slider";
 import { cn } from "@/utils/tailwind-merge";
+import { PiCaretCircleRight } from "react-icons/pi";
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="JPG to PNG | pr.image">
   <hgroup>
+    <div class="mb-8 flex gap-2 items-center justify-center">
+      <ComboboxFormat client:load />
+      <PiCaretCircleRight className="text-accent-9" />
+      <ComboboxFormat client:load />
+    </div>
+
     <h1>JPG to PNG</h1>
     <h2 class="text-mauve-11 text-xl">Convert image from JPG to PNG</h2>
   </hgroup>
