@@ -1,5 +1,6 @@
 "use client";
 
+import { setInput, setOutput } from "@/stores/image-extension-store";
 import { cn } from "@/utils/tailwind-merge";
 import * as React from "react";
 import { PiCaretCircleRight, PiCaretUpDownBold, PiCheckBold } from "react-icons/pi";
@@ -9,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 const inputExtension = [
   { value: "jpg", label: "JPG" },
-  { value: "JPEG", label: "JPEG" },
+  { value: "jpeg", label: "JPEG" },
   { value: "png", label: "PNG" }
 ];
 
@@ -59,6 +60,15 @@ export function ComboboxFormat() {
 }
 
 function InputExtension({ setState, state, setComboboxState }: ComboboxChildrenProps) {
+  function handleInputChange(currentValue: string) {
+    setState(() => {
+      setInput(currentValue);
+      return currentValue === state ? "" : currentValue;
+    });
+
+    setComboboxState(false);
+  }
+
   return (
     <PopoverContent className="w-[200px] p-0">
       <Command>
@@ -67,14 +77,7 @@ function InputExtension({ setState, state, setComboboxState }: ComboboxChildrenP
           <CommandEmpty>No extension found.</CommandEmpty>
           <CommandGroup>
             {inputExtension.map(framework => (
-              <CommandItem
-                key={framework.value}
-                value={framework.value}
-                onSelect={currentValue => {
-                  setState(currentValue === state ? "" : currentValue);
-                  setComboboxState(false);
-                }}
-              >
+              <CommandItem key={framework.value} value={framework.value} onSelect={handleInputChange}>
                 <PiCheckBold className={cn("mr-2 h-4 w-4", state === framework.value ? "opacity-100" : "opacity-0")} />
                 {framework.label}
               </CommandItem>
@@ -87,6 +90,15 @@ function InputExtension({ setState, state, setComboboxState }: ComboboxChildrenP
 }
 
 function OutputExtension({ setState, state, setComboboxState }: ComboboxChildrenProps) {
+  function handleInputChange(currentValue: string) {
+    setState(() => {
+      setOutput(currentValue);
+      return currentValue === state ? "" : currentValue;
+    });
+
+    setComboboxState(false);
+  }
+
   return (
     <PopoverContent className="w-[200px] p-0">
       <Command>
@@ -95,14 +107,7 @@ function OutputExtension({ setState, state, setComboboxState }: ComboboxChildren
           <CommandEmpty>No extension found.</CommandEmpty>
           <CommandGroup>
             {inputExtension.map(framework => (
-              <CommandItem
-                key={framework.value}
-                value={framework.value}
-                onSelect={currentValue => {
-                  setState(currentValue === state ? "" : currentValue);
-                  setComboboxState(false);
-                }}
-              >
+              <CommandItem key={framework.value} value={framework.value} onSelect={handleInputChange}>
                 <PiCheckBold className={cn("mr-2 h-4 w-4", state === framework.value ? "opacity-100" : "opacity-0")} />
                 {framework.label}
               </CommandItem>

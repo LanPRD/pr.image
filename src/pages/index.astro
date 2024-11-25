@@ -4,8 +4,8 @@ import { ComboboxFormat } from "@/components/combobox-format";
 import Input from "@/components/input.astro";
 import { Label } from "@/components/label";
 import { Slider } from "@/components/slider";
+import { inputOutputStore } from "@/stores/image-extension-store";
 import { cn } from "@/utils/tailwind-merge";
-import { PiCaretCircleRight } from "react-icons/pi";
 import Layout from "../layouts/Layout.astro";
 ---
 
@@ -13,8 +13,16 @@ import Layout from "../layouts/Layout.astro";
   <hgroup>
     <ComboboxFormat client:load />
 
-    <h1>JPG to PNG</h1>
-    <h2 class="text-mauve-11 text-xl">Convert image from JPG to PNG</h2>
+    <h1>
+      <span id="input-extension">{inputOutputStore.get().input}</span> to <span id="output-extension"
+        >{inputOutputStore.get().output}</span
+      >
+    </h1>
+    <h2 class="text-mauve-11 text-xl">
+      Convert image from <span id="input-extension-subtitle">{inputOutputStore.get().input}</span> to <span
+        id="output-extension-subtitle">{inputOutputStore.get().output}</span
+      >
+    </h2>
   </hgroup>
 
   <section class="mt-10">
@@ -28,7 +36,7 @@ import Layout from "../layouts/Layout.astro";
             "text-accent-11 cursor-pointer"
           )}
         >
-          Select JPG image
+          Select&nbsp;<span id="input-extension-label">{inputOutputStore.get().input}</span>&nbsp;image
         </Label>
         <Input id="image-selected" type="file" accept=".jpg, .jpeg" class="sr-only" />
       </div>
@@ -55,9 +63,31 @@ import Layout from "../layouts/Layout.astro";
 
   <script>
     import { ImageConversionController } from "@/controllers/image-conversion-controller";
+    import { inputOutputStore } from "@/stores/image-extension-store";
     import { removeExtension } from "@/utils/file";
 
     document.addEventListener("DOMContentLoaded", () => {
+      const inputExtensionElement = document.getElementById("input-extension") as HTMLSpanElement | null;
+      const outputExtensionElement = document.getElementById("output-extension") as HTMLSpanElement | null;
+
+      const inputExtensionSubtitle = document.getElementById("input-extension-subtitle") as HTMLSpanElement | null;
+      const outputExtensionSubtitle = document.getElementById("output-extension-subtitle") as HTMLSpanElement | null;
+
+      const inputExtensionLabel = document.getElementById("input-extension-label") as HTMLSpanElement | null;
+
+      inputOutputStore.subscribe(state => {
+        if (inputExtensionElement && inputExtensionSubtitle && inputExtensionLabel) {
+          inputExtensionLabel.textContent = state.input.toUpperCase();
+          inputExtensionElement.textContent = state.input.toUpperCase();
+          inputExtensionSubtitle.textContent = state.input.toUpperCase();
+        }
+
+        if (outputExtensionElement && outputExtensionSubtitle) {
+          outputExtensionElement.textContent = state.output.toUpperCase();
+          outputExtensionSubtitle.textContent = state.output.toUpperCase();
+        }
+      });
+
       const fileInput = document.getElementById("image-selected") as HTMLInputElement | null;
       const imgPreview = document.getElementById("img-preview") as HTMLImageElement | null;
       const downloadLink = document.getElementById("download-link") as HTMLAnchorElement | null;
