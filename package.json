@@ -23,8 +23,8 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "astro": "^4.16.14",
-    "class-variance-authority": "^0.7.0",
+    "astro": "^4.16.16",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
     "nanostores": "^0.11.3",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "commitizen": "^4.3.1",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.1",
     "prettier-plugin-astro": "^0.14.1"
   },
   "config": {
